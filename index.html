@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>此案 彼岸</title>
+    <meta
+      name="description"
+      content="Personal homepage for applied science, machine learning systems, and frontier AI notes."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --background: #ffffff;
+        --foreground: #090909;
+        --muted: #79716b;
+        --border: #e8e6e3;
+        --surface: #f7f7f6;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        background: var(--background);
+        color: var(--foreground);
+        font-family: "Newsreader", ui-serif, Georgia, serif;
+        font-size: 16px;
+        line-height: 24px;
+        margin: 0;
+        text-rendering: optimizeLegibility;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      a {
+        color: inherit;
+        text-decoration-color: rgba(9, 9, 9, 0.32);
+        text-decoration-thickness: 1px;
+        text-underline-offset: 4px;
+      }
+
+      a:hover {
+        text-decoration-color: currentColor;
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin-top: 0;
+      }
+
+      .page {
+        margin: 0 auto;
+        max-width: 672px;
+        padding: 48px 24px 96px;
+      }
+
+      header {
+        align-items: flex-start;
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 62px;
+      }
+
+      .wordmark,
+      nav,
+      .section-note,
+      footer,
+      .essay span {
+        font-family: "Figtree", ui-sans-serif, system-ui, sans-serif;
+      }
+
+      .wordmark {
+        color: var(--muted);
+        font-size: 15px;
+        font-weight: 500;
+        line-height: 20px;
+        text-decoration: none;
+      }
+
+      nav {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        text-align: right;
+      }
+
+      nav a,
+      footer a {
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 20px;
+        text-decoration: none;
+        text-transform: lowercase;
+      }
+
+      nav a:hover,
+      footer a:hover {
+        color: var(--foreground);
+      }
+
+      h1 {
+        font-size: clamp(2.25rem, 8.5vw, 3rem);
+        font-weight: 400;
+        letter-spacing: 0;
+        line-height: 1.25;
+        margin-bottom: 22px;
+      }
+
+      .intro {
+        margin-bottom: 52px;
+      }
+
+      .intro p {
+        color: var(--foreground);
+        font-size: 16.8px;
+        line-height: 31px;
+        margin-bottom: 24px;
+      }
+
+      section {
+        margin-top: 48px;
+      }
+
+      .section-head {
+        align-items: baseline;
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 16px;
+      }
+
+      h2 {
+        font-family: "Figtree", ui-sans-serif, system-ui, sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 20px;
+        margin: 0;
+      }
+
+      .section-note {
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 18px;
+      }
+
+      h3 {
+        font-size: 17px;
+        font-weight: 400;
+        line-height: 24px;
+        margin-bottom: 2px;
+      }
+
+      .essays {
+        display: grid;
+      }
+
+      .essay {
+        display: flex;
+        gap: 14px;
+        justify-content: space-between;
+        padding: 9px 0;
+        text-decoration: none;
+      }
+
+      .essay strong {
+        font-size: 17px;
+        font-weight: 400;
+        line-height: 24px;
+      }
+
+      .essay span {
+        color: var(--muted);
+        flex: 0 0 auto;
+        font-size: 14px;
+        line-height: 22px;
+      }
+
+      footer {
+        color: var(--muted);
+        display: flex;
+        flex-wrap: wrap;
+        font-size: 14px;
+        gap: 10px;
+        justify-content: space-between;
+        line-height: 20px;
+        margin-top: 54px;
+      }
+
+      .links {
+        display: flex;
+        gap: 12px;
+      }
+
+      @media (max-width: 680px) {
+        .page {
+          padding-top: 36px;
+        }
+
+        header {
+          margin-bottom: 48px;
+        }
+
+        .essay {
+          flex-direction: column;
+          gap: 2px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <header>
+        <a class="wordmark" href="#">此案 彼岸</a>
+        <nav aria-label="Primary navigation">
+          <a href="#">home</a>
+          <a href="#essays">essays</a>
+        </nav>
+      </header>
+
+      <main>
+        <section class="intro" aria-labelledby="intro-title">
+          <h1 id="intro-title">此案 彼岸</h1>
+          <p>
+            I'm an applied scientist working on machine learning systems and
+            gradually orienting more of my work toward frontier AI. I like
+            problems where modeling, infrastructure, product judgment, and taste
+            all have to meet in the same room.
+          </p>
+          <p>
+            Lately, I've been thinking about evaluation, model behavior,
+            decision systems, and how to turn research instincts into artifacts
+            other people can use. This site is a small home for that work:
+            notes, questions, and the occasional thread worth saving.
+          </p>
+        </section>
+
+        <section id="essays" aria-labelledby="essays-title">
+          <div class="section-head">
+            <h2 id="essays-title">Essays</h2>
+            <span class="section-note">drafts and notes</span>
+          </div>
+          <div class="essays">
+            <a class="essay" href="#">
+              <strong>Evaluation is the new product intuition</strong>
+              <span>2026</span>
+            </a>
+            <a class="essay" href="#">
+              <strong>What makes an AI system trustworthy enough to ship?</strong>
+              <span>2026</span>
+            </a>
+            <a class="essay" href="#">
+              <strong>From applied science to frontier AI</strong>
+              <span>2026</span>
+            </a>
+          </div>
+        </section>
+      </main>
+
+      <footer>
+        <span>chuan · 2026</span>
+        <div class="links">
+          <a href="mailto:">email</a>
+          <a href="#">linkedin</a>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>
