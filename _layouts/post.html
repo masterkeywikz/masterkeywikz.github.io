@@ -22,6 +22,10 @@
         --border: #e8e6e3;
         --surface: #f7f7f6;
         --code: #f3f2f0;
+        --code-surface: #fbfaf8;
+        --code-border: #dedbd4;
+        --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+          "Liberation Mono", "Courier New", monospace;
       }
 
       * {
@@ -76,9 +80,7 @@
       .wordmark,
       nav,
       .date,
-      footer,
-      code,
-      pre {
+      footer {
         font-family: "Figtree", ui-sans-serif, system-ui, sans-serif;
       }
 
@@ -170,26 +172,72 @@
       code {
         background: var(--code);
         border-radius: 4px;
+        font-family: var(--mono);
         font-size: 0.85em;
         padding: 0.1em 0.28em;
       }
 
+      div.highlighter-rouge,
+      div.highlight {
+        margin: 0 0 28px;
+      }
+
       pre {
-        background: var(--surface);
-        border: 1px solid var(--border);
+        background: var(--code-surface);
+        border: 1px solid var(--code-border);
         border-radius: 8px;
-        font-size: 14px;
-        line-height: 22px;
-        margin-bottom: 28px;
+        color: #24211d;
+        font-family: var(--mono);
+        font-size: 13.5px;
+        line-height: 1.65;
+        margin: 0 0 28px;
         overflow-x: auto;
-        padding: 18px;
+        padding: 16px 18px;
+        tab-size: 4;
       }
 
       pre code {
         background: transparent;
         border-radius: 0;
+        display: block;
         font-size: inherit;
+        line-height: inherit;
         padding: 0;
+        white-space: pre;
+      }
+
+      div.highlighter-rouge pre,
+      div.highlight pre {
+        margin-bottom: 0;
+      }
+
+      .highlight .c,
+      .highlight .c1,
+      .highlight .cm {
+        color: #81786d;
+      }
+
+      .highlight .k,
+      .highlight .kd,
+      .highlight .kn {
+        color: #7f4f9f;
+      }
+
+      .highlight .nb,
+      .highlight .nf,
+      .highlight .nc {
+        color: #1f5d8c;
+      }
+
+      .highlight .s,
+      .highlight .s1,
+      .highlight .s2 {
+        color: #8a4f18;
+      }
+
+      .highlight .mi,
+      .highlight .mf {
+        color: #356b3f;
       }
 
       figure {
