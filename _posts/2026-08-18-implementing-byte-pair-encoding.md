@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Implementing Byte Pair Encoding (BPE): foundations that made it click for me"
+title: "LLM Fundamentals: Implementing Byte Pair Encoding (BPE), foundations that made it click for me"
 date: 2026-08-18 21:55:00 -0700
 permalink: /essays/implementing-byte-pair-encoding/
 categories: tokenization machine-learning
