@@ -71,6 +71,13 @@ At a high level, byte-level BPE does something simple:
 
 The goal isn’t to “understand language.” It’s to build a compact, reusable set of building blocks that represent common byte patterns as single tokens.
 
+<figure class="visual-diagram">
+  <img src="/assets/images/bpe-merge-pass.svg" alt="Excalidraw-style diagram of one BPE merge pass: start with byte tokens, count adjacent pairs, choose a pair, and replace matching occurrences." />
+  <figcaption>One training merge pass: count adjacent pairs, choose the next merge rule, then rewrite the token sequence.</figcaption>
+</figure>
+
+The diagram uses letters to keep the example readable, but for byte-level BPE those letters are just byte ids. After a merge, the new token represents a byte sequence. In the example, `AN` is not a character; it is shorthand for the two-byte sequence that used to be `a` followed by `n`.
+
 ---
 
 ## A minimal implementation sketch
