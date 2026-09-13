@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 560" role="img" aria-labelledby="title desc">
+  <title id="title">Building a BPE vocabulary from bytes and merge rules</title>
+  <desc id="desc">A hand drawn style diagram showing a BPE vocabulary starting with 256 byte tokens, then growing by adding frequent merged byte sequences.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#1f1f1f"/>
+    </marker>
+    <style>
+      .paper { fill: #fffdf7; }
+      .ink { stroke: #1f1f1f; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; fill: none; }
+      .soft { stroke: #7a746c; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; fill: none; }
+      .box { fill: #ffffff; stroke: #1f1f1f; stroke-width: 2.2; }
+      .byte { fill: #f8f1dc; stroke: #1f1f1f; stroke-width: 2.1; }
+      .merge { fill: #e8f6e8; stroke: #1f1f1f; stroke-width: 2.2; }
+      .rank { fill: #dff1ff; stroke: #1f1f1f; stroke-width: 2.2; }
+      .label { fill: #1f1f1f; font: 600 24px Figtree, Arial, sans-serif; }
+      .small { fill: #1f1f1f; font: 500 18px Figtree, Arial, sans-serif; }
+      .tiny { fill: #7a746c; font: 500 15px Figtree, Arial, sans-serif; }
+      .mono { fill: #1f1f1f; font: 600 19px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    </style>
+  </defs>
+
+  <rect class="paper" width="980" height="560"/>
+
+  <text class="label" x="54" y="56">Vocabulary growth is the training artifact</text>
+  <text class="tiny" x="54" y="84">Training does not store every corpus example; it stores byte sequences ranked by merge priority.</text>
+
+  <text class="small" x="58" y="146">1. Fixed base vocabulary</text>
+  <g transform="translate(58 170)">
+    <rect class="byte" x="0" y="0" width="102" height="58" rx="12"/>
+    <rect class="byte" x="118" y="2" width="102" height="56" rx="12"/>
+    <rect class="byte" x="236" y="-1" width="102" height="59" rx="12"/>
+    <rect class="byte" x="354" y="1" width="102" height="57" rx="12"/>
+    <text class="mono" x="22" y="37">0x00</text>
+    <text class="mono" x="140" y="37">0x01</text>
+    <text class="mono" x="257" y="37">...</text>
+    <text class="mono" x="376" y="37">0xff</text>
+  </g>
+  <text class="tiny" x="58" y="258">ids 0-255: every possible byte has a fallback token.</text>
+
+  <path class="ink" marker-end="url(#arrow)" d="M 528 200 C 572 184, 616 185, 656 205"/>
+
+  <text class="small" x="676" y="146">2. Add learned merges</text>
+  <g transform="translate(676 170)">
+    <rect class="merge" x="0" y="0" width="226" height="58" rx="12"/>
+    <rect class="merge" x="0" y="74" width="226" height="58" rx="12"/>
+    <rect class="merge" x="0" y="148" width="226" height="58" rx="12"/>
+    <text class="mono" x="20" y="37">256 -> b"an"</text>
+    <text class="mono" x="20" y="111">257 -> b"ana"</text>
+    <text class="mono" x="20" y="185">258 -> b" ban"</text>
+  </g>
+
+  <text class="small" x="58" y="360">3. The same table drives encoding and decoding</text>
+  <g transform="translate(58 388)">
+    <rect class="rank" x="0" y="0" width="440" height="78" rx="14"/>
+    <text class="mono" x="24" y="48">b"an" has lower rank than b"ana"</text>
+  </g>
+  <path class="ink" marker-end="url(#arrow)" d="M 528 425 C 558 405, 584 407, 602 426"/>
+  <g transform="translate(622 388)">
+    <rect class="box" x="0" y="0" width="276" height="78" rx="14"/>
+    <text class="mono" x="25" y="48">token 257 -> b"ana"</text>
+  </g>
+  <text class="tiny" x="58" y="506">Lower rank means “earlier learned,” so it wins first during greedy encoding.</text>
+</svg>

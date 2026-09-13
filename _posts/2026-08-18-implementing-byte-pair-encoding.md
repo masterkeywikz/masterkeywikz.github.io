@@ -46,15 +46,16 @@ The important detail: UTF-8 uses **variable-length bytes**. ASCII characters are
 
 ---
 
-## Why not just tokenize Unicode characters?
+## Why not start from Unicode code points?
 
-You *can* tokenize at the character level, but it comes with tradeoffs:
+You *can* tokenize at the Unicode code point level, but it comes with tradeoffs:
 
-- Unicode is huge (many languages, symbols, combined characters).
-- “Character” boundaries can get subtle (grapheme clusters, composed forms, etc.).
-- If you want a tokenizer that is robust to any input—especially arbitrary text on the internet—**bytes are a safer universal substrate**.
+- Unicode is huge and sparse.
+- User-visible “characters” are not always single code points.
+- Normalization, combining marks, emoji sequences, and odd text scraped from the internet all make the boundary between “character” and “thing the model should see” less clean than it first appears.
+- If you want a tokenizer that is robust to arbitrary input, **bytes are a safer universal substrate**.
 
-This is one of the reasons byte-level BPE became popular: it can accept any input string (because any string can be encoded to bytes), and it doesn’t have to assume a particular language or alphabet.
+This is one of the reasons byte-level BPE became popular: it starts with only 256 base symbols, can represent any UTF-8 text, and doesn’t have to assume a particular language or alphabet before learning larger patterns from data.
 
 ---
 
@@ -77,6 +78,39 @@ The goal isn’t to “understand language.” It’s to build a compact, reusab
 </figure>
 
 The diagram uses letters to keep the example readable, but for byte-level BPE those letters are just byte ids. After a merge, the new token represents a byte sequence. In the example, `AN` is not a character; it is shorthand for the two-byte sequence that used to be `a` followed by `n`.
+
+---
+
+## Building the BPE vocabulary
+
+The vocabulary is the artifact produced by training. At the start, the vocabulary contains one token for every possible byte value:
+
+```python
+vocab = {i: bytes([i]) for i in range(256)}
+```
+
+Then training repeatedly adds new entries:
+
+1. Split the training text into pieces.
+2. Encode each piece as bytes.
+3. Count adjacent token pairs across the training data.
+4. Pick the most frequent pair.
+5. Assign it the next token id.
+6. Replace each non-overlapping occurrence of that pair in the training representation.
+7. Repeat until the vocabulary reaches the target size.
+
+<figure class="visual-diagram">
+  <img src="/assets/images/bpe-vocab-build.svg" alt="Excalidraw-style diagram of BPE vocabulary growth: start with 256 byte tokens, then add learned merged byte sequences with new token ids." />
+  <figcaption>The vocabulary grows from raw bytes into ranked byte sequences. The rank is what later determines merge priority during encoding.</figcaption>
+</figure>
+
+A useful way to keep the data structures straight:
+
+- `vocab[id] -> bytes` is what decoding needs.
+- `mergeable_ranks[token_bytes] -> rank/token id` is what encoding needs.
+- The order of learned merges matters because lower rank means higher merge priority.
+
+This is also where BPE starts to feel less mysterious. The tokenizer is not learning semantics directly; it is learning a ranked compression table over byte sequences. Common byte patterns get promoted into single tokens.
 
 ---
 
@@ -145,6 +179,24 @@ What this is doing:
 - Merge it, and repeat until no merge rule applies.
 
 This “keep applying the highest-priority merge available” pattern is the heart of BPE encoding.
+
+---
+
+## How this maps to `tiktoken`
+
+OpenAI’s [`tiktoken`](https://github.com/openai/tiktoken) repository has two useful layers to read:
+
+- [`tiktoken/_educational.py`](https://github.com/openai/tiktoken/blob/main/tiktoken/_educational.py) is the readable version. It defines `SimpleBytePairEncoding`, stores `pat_str` and `mergeable_ranks`, and builds a decoder from ranks back to bytes.
+- [`bpe_train`](https://github.com/openai/tiktoken/blob/main/tiktoken/_educational.py#L107-L167) is the vocabulary-building loop: initialize 256 byte tokens, split training text with regex, count adjacent pairs, add the most common pair as the next rank, then rewrite the training representation.
+- [`bpe_encode`](https://github.com/openai/tiktoken/blob/main/tiktoken/_educational.py#L74-L105) is the greedy encoder: start with single-byte parts, find the mergeable adjacent pair with the lowest rank, merge it, repeat, then map the final byte sequences to token ids.
+- [`visualise_tokens`](https://github.com/openai/tiktoken/blob/main/tiktoken/_educational.py#L170-L186) is the built-in visualization helper. If you want an interactive or terminal-based view of the merge process, this is the best tool to start with.
+- [`tiktoken/core.py`](https://github.com/openai/tiktoken/blob/main/tiktoken/core.py#L14-L52) is the Python API wrapper around the production Rust core.
+- [`src/lib.rs`](https://github.com/openai/tiktoken/blob/main/src/lib.rs#L184-L196) contains the production `byte_pair_encode` dispatcher. The Rust version is optimized, but the conceptual loop is the same: use ranked byte sequences to decide which byte spans become tokens.
+
+For this blog, I’d use two visualization modes:
+
+- **Excalidraw-style SVGs** for the article itself. They’re stable, aesthetic, and explain the mental model without requiring readers to run code.
+- **`tiktoken._educational`** when experimenting locally. It can print intermediate token boundaries and makes the merge loop observable.
 
 ---
 
