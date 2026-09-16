@@ -274,6 +274,178 @@
         background: #fffdf7;
       }
 
+      .bpe-lab {
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        margin: 34px 0;
+        overflow: hidden;
+      }
+
+      .bpe-lab * {
+        box-sizing: border-box;
+      }
+
+      .bpe-lab__header {
+        align-items: flex-start;
+        background: #fffdf7;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        gap: 16px;
+        justify-content: space-between;
+        padding: 18px;
+      }
+
+      .bpe-lab__title {
+        font-family: "Figtree", ui-sans-serif, system-ui, sans-serif;
+        font-size: 15px;
+        font-weight: 600;
+        line-height: 22px;
+        margin: 0 0 4px;
+      }
+
+      .bpe-lab__status,
+      .bpe-lab__note {
+        color: var(--muted);
+        font-family: "Figtree", ui-sans-serif, system-ui, sans-serif;
+        font-size: 13px;
+        line-height: 20px;
+        margin: 0;
+      }
+
+      .bpe-lab__controls {
+        display: flex;
+        flex: 0 0 auto;
+        gap: 6px;
+      }
+
+      .bpe-lab__controls button {
+        appearance: none;
+        background: #ffffff;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        color: var(--foreground);
+        cursor: pointer;
+        font-family: "Figtree", ui-sans-serif, system-ui, sans-serif;
+        font-size: 13px;
+        line-height: 18px;
+        min-height: 34px;
+        padding: 7px 10px;
+      }
+
+      .bpe-lab__controls button:hover {
+        border-color: #b9b4ad;
+      }
+
+      .bpe-lab__controls button:disabled {
+        color: #b0aaa2;
+        cursor: not-allowed;
+      }
+
+      .bpe-lab__body {
+        background: #ffffff;
+        display: grid;
+        gap: 18px;
+        padding: 18px;
+      }
+
+      .bpe-lab__tokens {
+        align-items: center;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        min-height: 58px;
+      }
+
+      .bpe-token {
+        align-items: center;
+        background: #fbfaf8;
+        border: 1px solid var(--code-border);
+        border-radius: 8px;
+        display: inline-flex;
+        font-family: var(--mono);
+        font-size: 14px;
+        justify-content: center;
+        line-height: 20px;
+        min-height: 42px;
+        min-width: 42px;
+        padding: 8px 10px;
+        transition: background 160ms ease, border-color 160ms ease, transform 160ms ease;
+      }
+
+      .bpe-token.is-active {
+        background: #e8f6e8;
+        border-color: #8bae92;
+        transform: translateY(-2px);
+      }
+
+      .bpe-lab__pairs {
+        display: grid;
+        gap: 8px;
+        grid-template-columns: repeat(auto-fit, minmax(148px, 1fr));
+      }
+
+      .bpe-pair {
+        background: #fbfaf8;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        font-family: "Figtree", ui-sans-serif, system-ui, sans-serif;
+        font-size: 13px;
+        line-height: 19px;
+        padding: 10px;
+      }
+
+      .bpe-pair strong {
+        display: block;
+        font-family: var(--mono);
+        font-size: 13px;
+        font-weight: 600;
+        line-height: 20px;
+      }
+
+      .bpe-pair.is-chosen {
+        background: #dff1ff;
+        border-color: #92b8ce;
+      }
+
+      .bpe-pair.is-unranked {
+        color: var(--muted);
+      }
+
+      .bpe-lab__rank-list {
+        border-top: 1px solid var(--border);
+        display: grid;
+        gap: 8px;
+        grid-template-columns: repeat(auto-fit, minmax(154px, 1fr));
+        margin: 0;
+        padding: 18px 0 0;
+      }
+
+      .bpe-rank {
+        background: #fffdf7;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        font-family: var(--mono);
+        font-size: 13px;
+        line-height: 20px;
+        padding: 9px 10px;
+      }
+
+      .bpe-rank.is-used {
+        background: #e8f6e8;
+        border-color: #8bae92;
+      }
+
+      @media (max-width: 680px) {
+        .bpe-lab__header {
+          flex-direction: column;
+        }
+
+        .bpe-lab__controls {
+          flex-wrap: wrap;
+          width: 100%;
+        }
+      }
+
       footer {
         color: var(--muted);
         display: flex;

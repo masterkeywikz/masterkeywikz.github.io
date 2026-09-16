@@ -180,6 +180,30 @@ What this is doing:
 
 This “keep applying the highest-priority merge available” pattern is the heart of BPE encoding.
 
+The small widget below uses toy ranks for `banana`, but the loop is the same shape as `tiktoken._educational.bpe_encode`: scan adjacent byte parts, pick the mergeable pair with the lowest rank, merge it, then scan again.
+
+<section class="bpe-lab" data-bpe-lab aria-label="Interactive BPE merge loop">
+  <div class="bpe-lab__header">
+    <div>
+      <p class="bpe-lab__title">Interactive merge loop: encoding <code>banana</code></p>
+      <p class="bpe-lab__status" data-bpe-status>Loading merge steps…</p>
+    </div>
+    <div class="bpe-lab__controls">
+      <button type="button" data-bpe-action="prev">Prev</button>
+      <button type="button" data-bpe-action="next">Next</button>
+      <button type="button" data-bpe-action="play">Play</button>
+      <button type="button" data-bpe-action="reset">Reset</button>
+    </div>
+  </div>
+  <div class="bpe-lab__body">
+    <div class="bpe-lab__tokens" data-bpe-tokens aria-live="polite"></div>
+    <div class="bpe-lab__pairs" data-bpe-pairs></div>
+    <div class="bpe-lab__rank-list" data-bpe-ranks></div>
+    <p class="bpe-lab__note" data-bpe-note></p>
+  </div>
+</section>
+<script src="/assets/js/bpe-merge-lab.js" defer></script>
+
 ---
 
 ## How this maps to `tiktoken`
