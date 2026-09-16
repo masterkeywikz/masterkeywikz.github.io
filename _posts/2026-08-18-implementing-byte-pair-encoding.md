@@ -193,11 +193,6 @@ OpenAI’s [`tiktoken`](https://github.com/openai/tiktoken) repository has two u
 - [`tiktoken/core.py`](https://github.com/openai/tiktoken/blob/main/tiktoken/core.py#L14-L52) is the Python API wrapper around the production Rust core.
 - [`src/lib.rs`](https://github.com/openai/tiktoken/blob/main/src/lib.rs#L184-L196) contains the production `byte_pair_encode` dispatcher. The Rust version is optimized, but the conceptual loop is the same: use ranked byte sequences to decide which byte spans become tokens.
 
-For this blog, I’d use two visualization modes:
-
-- **Excalidraw-style SVGs** for the article itself. They’re stable, aesthetic, and explain the mental model without requiring readers to run code.
-- **`tiktoken._educational`** when experimenting locally. It can print intermediate token boundaries and makes the merge loop observable.
-
 ---
 
 ## What I like about thinking in bytes
