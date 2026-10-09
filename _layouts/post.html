@@ -27,6 +27,8 @@
         --muted: #79716b;
         --border: #e8e6e3;
         --surface: #f7f7f6;
+        --surface-warm: #fffdf7;
+        --accent: #2f6d62;
         --code: #f3f2f0;
         --code-surface: #fbfaf8;
         --code-border: #dedbd4;
@@ -72,8 +74,15 @@
 
       .page {
         margin: 0 auto;
-        max-width: 720px;
+        max-width: 1120px;
         padding: 48px 24px 96px;
+      }
+
+      .page > header,
+      .page > footer {
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 720px;
       }
 
       header {
@@ -123,11 +132,45 @@
         margin: 0 auto;
       }
 
+      .article-shell {
+        align-items: start;
+        display: grid;
+        gap: 42px;
+        grid-template-columns: minmax(0, 720px) minmax(240px, 1fr);
+      }
+
+      .post-content {
+        min-width: 0;
+      }
+
       .date {
         color: var(--muted);
         font-size: 14px;
         line-height: 20px;
         margin-bottom: 14px;
+      }
+
+      .post-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin: -14px 0 32px;
+      }
+
+      .tag {
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        color: var(--muted);
+        font-family: "Figtree", ui-sans-serif, system-ui, sans-serif;
+        font-size: 12px;
+        line-height: 18px;
+        padding: 3px 9px;
+        text-decoration: none;
+      }
+
+      .tag:hover {
+        border-color: #b9b4ad;
+        color: var(--foreground);
       }
 
       h1 {
@@ -173,6 +216,45 @@
         border: 0;
         border-top: 1px solid var(--border);
         margin: 42px 0;
+      }
+
+      sup {
+        font-family: "Figtree", ui-sans-serif, system-ui, sans-serif;
+        font-size: 0.64em;
+        line-height: 0;
+      }
+
+      sup a,
+      .reversefootnote {
+        color: var(--accent);
+        text-decoration: none;
+      }
+
+      .footnotes {
+        border-top: 1px solid var(--border);
+        color: #504a43;
+        font-size: 15px;
+        line-height: 24px;
+        margin-top: 48px;
+        padding-top: 22px;
+      }
+
+      .footnotes::before {
+        color: var(--muted);
+        content: "Notes";
+        display: block;
+        font-family: "Figtree", ui-sans-serif, system-ui, sans-serif;
+        font-size: 13px;
+        line-height: 20px;
+        margin-bottom: 10px;
+      }
+
+      .footnotes ol {
+        margin-bottom: 0;
+      }
+
+      .footnotes li:target {
+        background: var(--surface-warm);
       }
 
       code {
@@ -460,6 +542,180 @@
         border-color: #8bae92;
       }
 
+      .comment-anchor {
+        position: relative;
+      }
+
+      .comment-anchor.is-commented {
+        background:
+          linear-gradient(to bottom, transparent 58%, rgba(255, 242, 168, 0.72) 0)
+          no-repeat;
+      }
+
+      .comment-anchor.is-active-comment {
+        outline: 2px solid rgba(47, 109, 98, 0.24);
+        outline-offset: 4px;
+      }
+
+      .comment-button {
+        appearance: none;
+        background: #ffffff;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        color: var(--muted);
+        cursor: pointer;
+        font-family: "Figtree", ui-sans-serif, system-ui, sans-serif;
+        font-size: 12px;
+        line-height: 16px;
+        opacity: 0;
+        padding: 3px 8px;
+        position: absolute;
+        right: calc(100% + 12px);
+        top: 1px;
+        transition: opacity 150ms ease, border-color 150ms ease, color 150ms ease;
+        white-space: nowrap;
+      }
+
+      .comment-anchor:hover .comment-button,
+      .comment-anchor:focus-within .comment-button,
+      .comment-anchor.is-commented .comment-button {
+        opacity: 1;
+      }
+
+      .comment-button:hover,
+      .comment-button:focus-visible {
+        border-color: var(--accent);
+        color: var(--accent);
+      }
+
+      .comment-rail {
+        align-self: start;
+        position: sticky;
+        top: 24px;
+      }
+
+      .comment-panel {
+        border-left: 1px solid var(--border);
+        display: grid;
+        gap: 14px;
+        padding-left: 18px;
+      }
+
+      .comment-panel__title {
+        font-family: "Figtree", ui-sans-serif, system-ui, sans-serif;
+        font-size: 13px;
+        font-weight: 600;
+        line-height: 20px;
+        margin: 0;
+      }
+
+      .comment-profile,
+      .comment-compose,
+      .comment-list {
+        display: grid;
+        gap: 8px;
+      }
+
+      .comment-profile {
+        grid-template-columns: 1fr;
+      }
+
+      .comment-profile input,
+      .comment-compose textarea {
+        background: #ffffff;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        color: var(--foreground);
+        font-family: "Figtree", ui-sans-serif, system-ui, sans-serif;
+        font-size: 13px;
+        line-height: 18px;
+        min-width: 0;
+        padding: 8px 9px;
+        width: 100%;
+      }
+
+      .comment-compose textarea {
+        min-height: 84px;
+        resize: vertical;
+      }
+
+      .comment-compose button {
+        appearance: none;
+        background: var(--foreground);
+        border: 1px solid var(--foreground);
+        border-radius: 6px;
+        color: #ffffff;
+        cursor: pointer;
+        font-family: "Figtree", ui-sans-serif, system-ui, sans-serif;
+        font-size: 13px;
+        line-height: 18px;
+        min-height: 34px;
+        padding: 7px 10px;
+      }
+
+      .comment-compose button:disabled {
+        background: #c7c0b8;
+        border-color: #c7c0b8;
+        cursor: not-allowed;
+      }
+
+      .comment-target {
+        color: var(--muted);
+        font-family: "Figtree", ui-sans-serif, system-ui, sans-serif;
+        font-size: 12px;
+        line-height: 18px;
+        margin: 0;
+      }
+
+      .comment-card {
+        background: var(--surface-warm);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        display: grid;
+        gap: 8px;
+        padding: 10px;
+      }
+
+      .comment-card__head {
+        align-items: center;
+        display: grid;
+        gap: 8px;
+        grid-template-columns: 28px 1fr;
+      }
+
+      .comment-card img {
+        border-radius: 50%;
+        height: 28px;
+        object-fit: cover;
+        width: 28px;
+      }
+
+      .comment-card strong,
+      .comment-card time,
+      .comment-card p,
+      .comment-card__quote {
+        font-family: "Figtree", ui-sans-serif, system-ui, sans-serif;
+      }
+
+      .comment-card strong {
+        display: block;
+        font-size: 13px;
+        line-height: 18px;
+      }
+
+      .comment-card time,
+      .comment-card__quote {
+        color: var(--muted);
+        font-size: 11px;
+        line-height: 15px;
+      }
+
+      .comment-card p {
+        font-size: 13px;
+        line-height: 19px;
+        margin: 0;
+      }
+
       @media (max-width: 680px) {
         .bpe-lab__header {
           flex-direction: column;
@@ -495,6 +751,29 @@
         header {
           margin-bottom: 48px;
         }
+
+        .article-shell {
+          display: block;
+        }
+
+        .comment-button {
+          margin-left: 8px;
+          opacity: 1;
+          position: static;
+          vertical-align: middle;
+        }
+
+        .comment-rail {
+          margin-top: 44px;
+          position: static;
+        }
+
+        .comment-panel {
+          border-left: 0;
+          border-top: 1px solid var(--border);
+          padding-left: 0;
+          padding-top: 18px;
+        }
       }
     </style>
   </head>
@@ -508,12 +787,25 @@
         </nav>
       </header>
 
-      <main>
-        <article>
+      <main class="article-shell">
+        <article class="post-content" data-commentable data-post-id="{{ page.url | escape }}">
           <div class="date">{{ page.date | date: "%b %-d, %Y" }}</div>
           <h1>{{ page.title | escape }}</h1>
+          {% if page.tags %}
+            <div class="post-tags" aria-label="Post tags">
+              {% for tag in page.tags %}
+                <a class="tag" href="/#tag-{{ tag | slugify }}">{{ tag }}</a>
+              {% endfor %}
+            </div>
+          {% endif %}
           {{ content }}
         </article>
+
+        {% unless page.comments == false %}
+          <aside class="comment-rail" aria-label="Reader comments">
+            <section class="comment-panel" data-comment-panel></section>
+          </aside>
+        {% endunless %}
       </main>
 
       <footer>
@@ -524,5 +816,8 @@
         </div>
       </footer>
     </div>
+    {% unless page.comments == false %}
+      <script src="/assets/js/blog-comments.js" defer></script>
+    {% endunless %}
   </body>
 </html>

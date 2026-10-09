@@ -4,6 +4,11 @@ title: "LLM Fundamentals: Implementing Byte Pair Encoding (BPE), foundations tha
 date: 2026-08-18 21:55:00 -0700
 permalink: /essays/implementing-byte-pair-encoding/
 categories: tokenization machine-learning
+tags:
+  - llm-fundamentals
+  - tokenization
+  - bpe
+  - machine-learning
 ---
 
 When I first set out to implement Byte Pair Encoding (BPE), I assumed the hard part would be the merging logic. It wasn’t. The real friction came earlier: getting comfortable with what text *is* at the encoding level, and why tokenizers usually don’t operate on “characters” in the way we casually imagine.

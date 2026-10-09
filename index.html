@@ -1,3 +1,5 @@
+---
+---
 <!doctype html>
 <html lang="en">
   <head>
@@ -27,6 +29,7 @@
         --muted: #79716b;
         --border: #e8e6e3;
         --surface: #f7f7f6;
+        --accent: #2f6d62;
       }
 
       * {
@@ -38,7 +41,10 @@
       }
 
       body {
-        background: var(--background);
+        background:
+          linear-gradient(90deg, rgba(255, 255, 255, 0.97) 0%, rgba(255, 255, 255, 0.88) 52%, rgba(255, 255, 255, 0.72) 100%),
+          url("/assets/images/nihe-byakudo-bg.jpg") right -68px top 28px / min(42vw, 420px) auto no-repeat fixed,
+          var(--background);
         color: var(--foreground);
         font-family: "Newsreader", ui-serif, Georgia, serif;
         font-size: 16px;
@@ -160,6 +166,35 @@
         line-height: 18px;
       }
 
+      .tag-filter {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin: 0 0 18px;
+      }
+
+      .tag-filter button,
+      .essay-tags span {
+        appearance: none;
+        background: rgba(255, 255, 255, 0.78);
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        color: var(--muted);
+        cursor: pointer;
+        font-family: "Figtree", ui-sans-serif, system-ui, sans-serif;
+        font-size: 12px;
+        line-height: 18px;
+        padding: 3px 9px;
+        text-decoration: none;
+      }
+
+      .tag-filter button:hover,
+      .tag-filter button[aria-pressed="true"],
+      .essay-tags span:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+      }
+
       h3 {
         font-size: 17px;
         font-weight: 400;
@@ -175,8 +210,13 @@
         display: flex;
         gap: 14px;
         justify-content: space-between;
-        padding: 9px 0;
+        padding: 12px 0;
         text-decoration: none;
+      }
+
+      .essay-text {
+        display: grid;
+        gap: 6px;
       }
 
       .essay strong {
@@ -190,6 +230,12 @@
         flex: 0 0 auto;
         font-size: 14px;
         line-height: 22px;
+      }
+
+      .essay-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
       }
 
       footer {
@@ -209,6 +255,13 @@
       }
 
       @media (max-width: 680px) {
+        body {
+          background:
+            linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.96)),
+            url("/assets/images/nihe-byakudo-bg.jpg") right -72px top 18px / 210px auto no-repeat fixed,
+            var(--background);
+        }
+
         .page {
           padding-top: 36px;
         }
@@ -251,26 +304,41 @@
             <h2 id="essays-title">Essays</h2>
             <span class="section-note">notes and essays</span>
           </div>
+          <div class="tag-filter" aria-label="Filter essays by tag">
+            <button type="button" data-tag-filter="all" aria-pressed="true">all</button>
+            {% assign sorted_tags = site.tags | sort %}
+            {% for tag in sorted_tags %}
+              <button type="button" id="tag-{{ tag[0] | slugify }}" data-tag-filter="{{ tag[0] | slugify }}" aria-pressed="false">{{ tag[0] }}</button>
+            {% endfor %}
+          </div>
           <div class="essays">
-            <a class="essay" href="/essays/inference-bottlenecks-roofline-analysis/">
-              <strong>LLM Fundamentals: Understanding Inference Bottlenecks with Roofline Analysis</strong>
-              <span>Sep 26, 2026</span>
-            </a>
-            <a class="essay" href="/essays/implementing-byte-pair-encoding/">
-              <strong>LLM Fundamentals: Implementing Byte Pair Encoding (BPE), foundations that made it click for me</strong>
-              <span>Aug 18, 2026</span>
-            </a>
+            {% for post in site.posts %}
+              <a class="essay" href="{{ post.url }}" data-tags="{% for tag in post.tags %}{{ tag | slugify }} {% endfor %}">
+                <span class="essay-text">
+                  <strong>{{ post.title }}</strong>
+                  {% if post.tags %}
+                    <span class="essay-tags" aria-label="Tags">
+                      {% for tag in post.tags %}
+                        <span>{{ tag }}</span>
+                      {% endfor %}
+                    </span>
+                  {% endif %}
+                </span>
+                <span>{{ post.date | date: "%b %-d, %Y" }}</span>
+              </a>
+            {% endfor %}
           </div>
         </section>
       </main>
 
       <footer>
-        <span>chuan · 2026</span>
+        <span>chuan · 2026 · <a href="https://commons.wikimedia.org/wiki/File:White_Path_to_the_Pure_Land_of_Amida_(Amit%C4%81bha)_between_Two_Rivers_of_Worldly_Vice,_Kosetsu_Museum_of_Art.jpg">image source</a></span>
         <div class="links">
           <a href="mailto:">email</a>
           <a href="#">linkedin</a>
         </div>
       </footer>
     </div>
+    <script src="/assets/js/tag-filter.js" defer></script>
   </body>
 </html>

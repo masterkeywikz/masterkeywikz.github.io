@@ -4,6 +4,11 @@ title: "LLM Fundamentals: Understanding Inference Bottlenecks with Roofline Anal
 date: 2026-09-26 08:00:00 -0700
 permalink: /essays/inference-bottlenecks-roofline-analysis/
 categories: inference machine-learning systems
+tags:
+  - llm-fundamentals
+  - inference
+  - systems
+  - roofline
 ---
 
 In my [first LLM fundamentals post](/essays/implementing-byte-pair-encoding/), I explored how text becomes tokens. This post picks up further down the pipeline: once those tokens reach the model, what determines how fast it can respond?
@@ -21,7 +26,7 @@ After tokenization and scheduling, a typical autoregressive request has two phas
 
 Prompt tokens are already known, so prefill can process many positions together within each layer, while respecting the causal attention mask. Ordinary decoding has a dependency between successive generated tokens. Each active sequence contributes one new input token per decode step.
 
-That difference changes weight reuse. A prefill matrix multiplication can apply the same weights to many prompt positions; a batch-one decode applies them to just one position. Batching independent requests supplies more positions to work on together. The [inference chapter of *How To Scale Your Model*](https://jax-ml.github.io/scaling-book/inference/) explains this distinction in detail.
+That difference changes weight reuse. A prefill matrix multiplication can apply the same weights to many prompt positions; a batch-one decode applies them to just one position. Batching independent requests supplies more positions to work on together. The inference chapter of *How To Scale Your Model* explains this distinction in detail.[^scaling-book-inference]
 
 ## Count operations and bytes
 
@@ -52,7 +57,7 @@ achievable FLOP/s ≤ min(C, BW × I)
 ridge point = C / BW              [FLOPs/byte]
 ```
 
-Below the ridge point, bandwidth sets the lower ceiling. Above it, compute does. NVIDIA's [GPU performance guide](https://docs.nvidia.com/deeplearning/performance/dl-performance-gpu-background/index.html) describes these limits and the additional role of latency when work is too small to saturate the device.
+Below the ridge point, bandwidth sets the lower ceiling. Above it, compute does. NVIDIA's GPU performance guide describes these limits and the additional role of latency when work is too small to saturate the device.[^nvidia-gpu-background]
 
 <figure class="visual-diagram">
   <img src="/assets/images/inference-roofline.svg" alt="Roofline for an illustrative accelerator with 120 TFLOP/s compute and 2 TB/s bandwidth. The bandwidth ceiling rises with arithmetic intensity until it meets the compute ceiling at 60 FLOPs per byte. Weight-only BF16 decode batches of 1 and 16 fall below that ridge." />
@@ -141,7 +146,7 @@ I ≈ 2N / s
 
 During prefill, `N` can include many prompt positions. During decode, it is typically the number of active sequences. This gives prefill more opportunities to reuse weights and perform large matrix multiplications.
 
-“Prefill is compute-bound” is still a tendency, not a universal rule. Short prompts, small matrix dimensions, attention kernels, and activation traffic can change the limit. NVIDIA's [matrix multiplication guide](https://docs.nvidia.com/deeplearning/performance/dl-performance-matrix-multiplication/index.html) connects matrix dimensions and arithmetic intensity to these performance regimes.
+“Prefill is compute-bound” is still a tendency, not a universal rule. Short prompts, small matrix dimensions, attention kernels, and activation traffic can change the limit. NVIDIA's matrix multiplication guide connects matrix dimensions and arithmetic intensity to these performance regimes.[^nvidia-matmul]
 
 ## The missing term: reading the KV cache
 
@@ -192,3 +197,9 @@ The estimate suggests what to investigate. If weight reads dominate, batching or
 A single roofline for an entire decode step can hide mixed bottlenecks: a compute-limited linear kernel and a bandwidth-limited attention kernel execute in sequence. Summing bounds for those stages gives a more informative estimate than assuming all their costs overlap perfectly.
 
 The useful habit is to ask **how much arithmetic happens for each byte moved**. It explains why the same model behaves differently during prefill and decode, why batching helps, and why long context can consume the gains. The next question is how MHA, GQA, and MQA change that cache traffic.
+
+[^scaling-book-inference]: See the [inference chapter of *How To Scale Your Model*](https://jax-ml.github.io/scaling-book/inference/) for a broader discussion of prefill, decode, and serving tradeoffs.
+
+[^nvidia-gpu-background]: NVIDIA, [GPU Performance Background User's Guide](https://docs.nvidia.com/deeplearning/performance/dl-performance-gpu-background/index.html).
+
+[^nvidia-matmul]: NVIDIA, [Matrix Multiplication Background User's Guide](https://docs.nvidia.com/deeplearning/performance/dl-performance-matrix-multiplication/index.html).
