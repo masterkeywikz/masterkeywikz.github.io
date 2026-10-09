@@ -74,7 +74,7 @@
 
       .page {
         margin: 0 auto;
-        max-width: 1120px;
+        max-width: 720px;
         padding: 48px 24px 96px;
       }
 
@@ -133,10 +133,7 @@
       }
 
       .article-shell {
-        align-items: start;
-        display: grid;
-        gap: 42px;
-        grid-template-columns: minmax(0, 720px) minmax(240px, 1fr);
+        position: relative;
       }
 
       .post-content {
@@ -158,13 +155,11 @@
       }
 
       .tag {
-        border: 1px solid var(--border);
-        border-radius: 999px;
         color: var(--muted);
         font-family: "Figtree", ui-sans-serif, system-ui, sans-serif;
         font-size: 12px;
         line-height: 18px;
-        padding: 3px 9px;
+        padding: 0;
         text-decoration: none;
       }
 
@@ -589,16 +584,35 @@
       }
 
       .comment-rail {
-        align-self: start;
-        position: sticky;
-        top: 24px;
+        margin-top: 44px;
       }
 
       .comment-panel {
-        border-left: 1px solid var(--border);
+        border-top: 1px solid var(--border);
         display: grid;
         gap: 14px;
-        padding-left: 18px;
+        padding-top: 18px;
+      }
+
+      @media (min-width: 1320px) {
+        .comment-rail {
+          bottom: 0;
+          left: calc(100% + 42px);
+          margin-top: 0;
+          position: absolute;
+          top: 0;
+          width: 240px;
+        }
+
+        .comment-panel {
+          border-left: 1px solid var(--border);
+          border-top: 0;
+          max-height: calc(100vh - 48px);
+          overflow-y: auto;
+          padding: 0 0 0 18px;
+          position: sticky;
+          top: 24px;
+        }
       }
 
       .comment-panel__title {

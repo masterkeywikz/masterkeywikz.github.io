@@ -29,7 +29,6 @@
         --muted: #79716b;
         --border: #e8e6e3;
         --surface: #f7f7f6;
-        --accent: #2f6d62;
       }
 
       * {
@@ -41,10 +40,7 @@
       }
 
       body {
-        background:
-          linear-gradient(90deg, rgba(255, 255, 255, 0.97) 0%, rgba(255, 255, 255, 0.88) 52%, rgba(255, 255, 255, 0.72) 100%),
-          url("/assets/images/nihe-byakudo-bg.jpg") right -68px top 28px / min(42vw, 420px) auto no-repeat fixed,
-          var(--background);
+        background: var(--background);
         color: var(--foreground);
         font-family: "Newsreader", ui-serif, Georgia, serif;
         font-size: 16px;
@@ -52,6 +48,25 @@
         margin: 0;
         text-rendering: optimizeLegibility;
         -webkit-font-smoothing: antialiased;
+      }
+
+      body::before {
+        background: url("/assets/images/nihe-byakudo-bg.jpg") center / contain no-repeat;
+        content: "";
+        inset: 24px;
+        margin: auto;
+        max-width: calc((100vh - 48px) * 969 / 1800);
+        mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent),
+          linear-gradient(to bottom, transparent, #000 8%, #000 92%, transparent);
+        mask-composite: intersect;
+        opacity: 0.07;
+        pointer-events: none;
+        position: fixed;
+        z-index: -1;
+      }
+
+      body {
+        isolation: isolate;
       }
 
       a {
@@ -89,7 +104,7 @@
       nav,
       .section-note,
       footer,
-      .essay span {
+      .essay-date {
         font-family: "Figtree", ui-sans-serif, system-ui, sans-serif;
       }
 
@@ -169,30 +184,30 @@
       .tag-filter {
         display: flex;
         flex-wrap: wrap;
-        gap: 8px;
+        gap: 6px 14px;
         margin: 0 0 18px;
       }
 
       .tag-filter button,
       .essay-tags span {
         appearance: none;
-        background: rgba(255, 255, 255, 0.78);
-        border: 1px solid var(--border);
-        border-radius: 999px;
+        background: none;
+        border: 0;
+        border-radius: 0;
         color: var(--muted);
         cursor: pointer;
         font-family: "Figtree", ui-sans-serif, system-ui, sans-serif;
         font-size: 12px;
         line-height: 18px;
-        padding: 3px 9px;
+        padding: 0;
         text-decoration: none;
       }
 
       .tag-filter button:hover,
-      .tag-filter button[aria-pressed="true"],
-      .essay-tags span:hover {
-        border-color: var(--accent);
-        color: var(--accent);
+      .tag-filter button[aria-pressed="true"] {
+        color: var(--foreground);
+        text-decoration: underline;
+        text-underline-offset: 4px;
       }
 
       h3 {
@@ -210,13 +225,18 @@
         display: flex;
         gap: 14px;
         justify-content: space-between;
-        padding: 12px 0;
+        padding: 9px 0;
         text-decoration: none;
       }
 
       .essay-text {
         display: grid;
         gap: 6px;
+        min-width: 0;
+      }
+
+      .essay[hidden] {
+        display: none;
       }
 
       .essay strong {
@@ -225,7 +245,7 @@
         line-height: 24px;
       }
 
-      .essay span {
+      .essay-date {
         color: var(--muted);
         flex: 0 0 auto;
         font-size: 14px;
@@ -235,7 +255,11 @@
       .essay-tags {
         display: flex;
         flex-wrap: wrap;
-        gap: 6px;
+        gap: 4px 12px;
+      }
+
+      .essay-tags span {
+        cursor: inherit;
       }
 
       footer {
@@ -255,11 +279,9 @@
       }
 
       @media (max-width: 680px) {
-        body {
-          background:
-            linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.96)),
-            url("/assets/images/nihe-byakudo-bg.jpg") right -72px top 18px / 210px auto no-repeat fixed,
-            var(--background);
+        body::before {
+          inset: 16px;
+          max-height: calc((100vw - 32px) * 1800 / 969);
         }
 
         .page {
@@ -324,7 +346,7 @@
                     </span>
                   {% endif %}
                 </span>
-                <span>{{ post.date | date: "%b %-d, %Y" }}</span>
+                <span class="essay-date">{{ post.date | date: "%b %-d, %Y" }}</span>
               </a>
             {% endfor %}
           </div>
